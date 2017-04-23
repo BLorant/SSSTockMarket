@@ -8,6 +8,10 @@ class Stock:
         self.is_preferred = is_preferred
         self.fixed_dividend = fixed_dividend
 
+    @property
+    def type(self):
+        return "preferred" if self.is_preferred else "common"
+
     def get_dividend_yield(self, price):
         if price == 0:
             raise Exception('Price cant be zero')
