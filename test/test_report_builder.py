@@ -17,15 +17,15 @@ class TestReportBuilder(TestCase):
         stock = Stock('ABC', 10, 100)
         th.buy_stock(stock, 2, 10)
         th.buy_stock(stock, 3, 10)
-        self.assertAlmostEqual(10.0, get_volume_wighted_stock_price(th, stock))
+        self.assertAlmostEqual(10.0, get_volume_weighted_stock_price(th, stock))
         th.sell_stock(stock, 10, 20)
-        self.assertAlmostEqual(16.66666, get_volume_wighted_stock_price(th, stock), delta=0.00001)
+        self.assertAlmostEqual(16.66666, get_volume_weighted_stock_price(th, stock), delta=0.00001)
 
     def test_get_volume_wighted_stock_price_with_only_old_trades(self):
         th = TradeHandler()
         stock = Stock('ABC', 10, 100)
         th.buy_stock(stock, 2, 10, timestamp=datetime.datetime.now() - datetime.timedelta(minutes=16))
-        self.assertIsNone(get_volume_wighted_stock_price(th, stock))
+        self.assertIsNone(get_volume_weighted_stock_price(th, stock))
 
     def test_get_volume_wighted_stock_price_with_older_trades(self):
         th = TradeHandler()
@@ -36,7 +36,7 @@ class TestReportBuilder(TestCase):
         th.buy_stock(stock, 2, 10, timestamp=should_be_okay)
         th.buy_stock(stock, 3, 30, timestamp=should_be_okay)
         th.buy_stock(stock, 1, 50)
-        self.assertAlmostEqual(26.66666, get_volume_wighted_stock_price(th, stock), delta=0.00001)
+        self.assertAlmostEqual(26.66666, get_volume_weighted_stock_price(th, stock), delta=0.00001)
 
     def test_get_all_share_index_with_no_valid_trades(self):
         th = TradeHandler()

@@ -36,14 +36,13 @@ class TestTradeHandler(TestCase):
         trade_stock1_3 = th.buy_stock(stock1, 4, 10)
         trade_stock2_1 = th.sell_stock(stock2, 2, 10)
         trade_stock3_1 = th.sell_stock(stock3, 2, 10)
-        trade_list = th._trades['ABC']['common']
         self.assertEquals(th._trades['ABC']['common'], [trade_stock1_1, trade_stock1_2, trade_stock1_3])
         self.assertEquals(th._trades['ABD']['common'], [trade_stock2_1])
         self.assertEquals(th._trades['ABC']['preferred'], [trade_stock3_1])
 
     def test_get_all_trades_for_untraded_stock(self):
         stock1 = Stock('ABC', 10, 100)
-        self.assertIsNone(TradeHandler().get_all_trades_for_stock(stock1))
+        self.assertEquals(TradeHandler().get_all_trades_for_stock(stock1), [])
 
     def test_get_all_trades_for_stock(self):
         th = TradeHandler()
