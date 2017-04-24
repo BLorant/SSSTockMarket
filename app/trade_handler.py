@@ -39,7 +39,7 @@ class TradeHandler:
         self._stocks.add(stock)
         if stock.symbol not in self._trades:
             self._trades[stock.symbol] = {'common': [], 'preferred': []}
-        self.get_all_trades_for_stock(stock).append(trade)
+        self._trades[stock.symbol][stock.type].append(trade)
         return trade
 
     def get_all_trades_for_stock(self, stock):
@@ -47,11 +47,11 @@ class TradeHandler:
         returns all trades for a given stock empty list if there are no recorded trades
         """
         if stock.symbol in self._trades:
-            return self._trades[stock.symbol][stock.type]
+            return self._trades[stock.symbol][stock.type][:]
         return []
 
     def get_all_stocks(self):
         """
         returns all stocks that the system knows about
         """
-        return self._stocks
+        return set(self._stocks)

@@ -24,8 +24,11 @@ class TestReportBuilder(TestCase):
     def test_get_volume_wighted_stock_price_with_only_old_trades(self):
         th = TradeHandler()
         stock = Stock('ABC', 10, 100)
-        th.buy_stock(stock, 2, 10, timestamp=datetime.datetime.now() - datetime.timedelta(minutes=16))
-        self.assertIsNone(get_volume_weighted_stock_price(th, stock))
+        minus_16_minutes = datetime.datetime.now() - datetime.timedelta(minutes=16)
+        th.buy_stock(stock, 2, 10, timestamp=minus_16_minutes)
+        with self.assertRaises(Exception) as context:
+            get_volume_weighted_stock_price(th, stock)
+        self.assertEquals(context.exception.message, 'No Trades found for the given Stock')
 
     def test_get_volume_wighted_stock_price_with_older_trades(self):
         th = TradeHandler()
@@ -42,7 +45,9 @@ class TestReportBuilder(TestCase):
         th = TradeHandler()
         stock = Stock('ABC', 10, 100)
         th.buy_stock(stock, 2, 10, timestamp=datetime.datetime.now() - datetime.timedelta(minutes=16))
-        self.assertIsNone(get_all_share_index(th))
+        with self.assertRaises(Exception) as context:
+            get_all_share_index(th)
+        self.assertEquals(context.exception.message, 'No Trades found for the given Stock')
 
     def test_get_all_share_index(self):
         th = TradeHandler()
